@@ -12,19 +12,27 @@ class GraphDrawer:
         self,
         graph,
         label_edge=DEFAULT_LABEL_EDGE_FUNC,
+        edge_list=None,
         draw_options=None,
     ):
         # TODO: refactor
         graph.graph.update(draw_options or {})
+        edge_list = edge_list or graph.edges
 
         nodes_positions = self._calculate_node_positions(graph)
         networkx.draw_networkx_labels(graph, nodes_positions)
         networkx.draw_networkx_nodes(graph, nodes_positions)
-        networkx.draw_networkx_edges(graph, nodes_positions, arrow=True)
+        networkx.draw_networkx_edges(
+            graph,
+            nodes_positions,
+            edgelist=edge_list,
+            arrow=True,
+        )
         networkx.draw_networkx_edge_labels(
             graph,
             nodes_positions,
-            edge_labels=dict(label_edge(x) for x in graph.edges.data()),
+            edge_labels=dict(label_edge((u, v, graph.get_edge_data(u, v)))
+                             for u, v in edge_list),
         )
         plt.show()
 
