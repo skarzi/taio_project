@@ -13,7 +13,7 @@ class DataLoader:
         projects = list()
         workers = list()
         with open(fname) as f:
-            task_info = TaskInfo(*self._info_from_first_line(f))
+            task_info = self._task_info_from_first_line(f)
             line_no = 0
             for line in f.readlines():
                 line = line.strip()
@@ -27,8 +27,9 @@ class DataLoader:
                 line_no += 1
         return Task(task_info, projects, workers)
 
-    def _info_from_first_line(self, file_handler):
+    def _task_info_from_first_line(self, file_handler):
         first_line = file_handler.readline().strip()
         while not first_line:
             first_line = file_handler.readline().strip()
-        return [int(x) for x in first_line.split(' ')]
+        first_line = [int(x) for x in first_line.split()]
+        return TaskInfo(first_line[1], first_line[0], first_line[-1])
