@@ -45,7 +45,7 @@ class GraphDrawer:
             graph.graph['source']: [X[0], 0.5],
             graph.graph['target']: [X[-1], 0.5],
         }
-        for i, key in enumerate(('workers', 'features', 'projects')):
+        for i, key in enumerate(('worker', 'feature', 'project')):
             for j, y in enumerate(np.linspace(0, 1, task_info[i])):
                 positions[labels_modifier.modify(key, j)] = [X[i + 1], y]
         return positions
