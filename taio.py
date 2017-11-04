@@ -17,6 +17,6 @@ if __name__ == '__main__':
 
     max_flow, assignments = solution(args.file)
     if not args.no_assignments:
-        for assignment in assignments:
-            print(assignment)
+        for worker, project in assignments:
+            print(worker, project)
     print(max_flow)
