@@ -3,6 +3,7 @@ import os
 import pytest
 
 from taio.data_loader import DataLoader
+from taio import exceptions
 
 
 TEST_DATA_DIRECTORY = os.path.join(
@@ -57,3 +58,19 @@ class TestDataLoader:
         assert tuple(task.info) == expected['info']
         assert task.workers == expected['workers']
         assert task.projects == expected['projects']
+
+    @pytest.mark.parametrize('test_filepath, expected_exception', [
+        ('invalid_test_data_0.txt', exceptions.FirstLineInputDataError),
+        ('invalid_test_data_1.txt', exceptions.ProjectsInputDataError),
+        ('invalid_test_data_2.txt', exceptions.WorkerInputDataError),
+        ('invalid_test_data_3.txt', exceptions.ProjectsNumberInputDataError),
+        ('invalid_test_data_666.txt', exceptions.InputDataFileNotExist),
+    ])
+    def test_data_loader_raises_exception_for_invalid_data(
+        self,
+        data_loader,
+        test_filepath,
+        expected_exception,
+    ):
+        with pytest.raises(expected_exception):
+            data_loader.load(path_to_test(test_filepath))
