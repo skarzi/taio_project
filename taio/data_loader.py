@@ -19,11 +19,11 @@ class DataLoader:
                 line = line.strip()
                 if not line:
                     continue
-                if line_no < task_info.projects_number:
-                    projects.append([int(x) for x in line.split(' ')])
-                else:
+                if line_no < task_info.workers_number:
                     workers.append([True if x == '1' else False
                                     for x in line.split(' ')])
+                else:
+                    projects.append([int(x) for x in line.split(' ')])
                 line_no += 1
         return Task(task_info, projects, workers)
 
