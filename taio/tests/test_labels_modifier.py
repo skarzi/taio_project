@@ -1,6 +1,9 @@
 import pytest
 
-from taio.graph import LabelsModifier
+from taio.graph import (
+    exceptions,
+    LabelsModifier,
+)
 from taio.data_loader import TaskInfo
 
 
@@ -67,5 +70,5 @@ class TestLabelsModifier:
         assert labels_modifier.modify_target(target_no) == expected
 
     def test_raises_exception_for_wrong_label_name(self, labels_modifier):
-        with pytest.raises(ValueError):
+        with pytest.raises(exceptions.GraphNodeLabelError):
             labels_modifier.modify('employee', 12)

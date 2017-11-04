@@ -1,8 +1,24 @@
 import collections
 
 
-def residual_capacity(G, u, v):
+def _residual_capacity(G, u, v):
     return G[u][v]['capacity'] - G[u][v]['flow']
+
+
+def _bfs(G, s, t, path):
+    visited = {node: False for node in G}
+    queue = collections.deque()
+    queue.append(s)
+    visited[s] = True
+
+    while queue:
+        u = queue.popleft()
+        for v in G[u]:
+            if _residual_capacity(G, u, v) > 0 and visited[v] is False:
+                queue.append(v)
+                visited[v] = True
+                path[v] = u
+    return visited[t]
 
 
 def edmonds_karp(G, s, t):
@@ -15,11 +31,11 @@ def edmonds_karp(G, s, t):
     max_flow = 0
     path = {node: None for node in g}
 
-    while bfs(g, s, t, path):
+    while _bfs(g, s, t, path):
         path_flow = float('inf')
         v = t
         while v != s:
-            path_flow = min(path_flow, residual_capacity(g, path[v], v))
+            path_flow = min(path_flow, _residual_capacity(g, path[v], v))
             v = path[v]
         max_flow += path_flow
         v = t
@@ -30,19 +46,3 @@ def edmonds_karp(G, s, t):
             v = u
     g.graph['max_flow'] = max_flow
     return g
-
-
-def bfs(G, s, t, path):
-    visited = {node: False for node in G}
-    queue = collections.deque()
-    queue.append(s)
-    visited[s] = True
-
-    while queue:
-        u = queue.popleft()
-        for v in G[u]:
-            if residual_capacity(G, u, v) > 0 and visited[v] is False:
-                queue.append(v)
-                visited[v] = True
-                path[v] = u
-    return visited[t]

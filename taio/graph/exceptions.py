@@ -8,3 +8,7 @@ class EdgeDoesNotExist(GraphException):
 
 class VertexDoesNotExist(GraphException):
     pass
+
+
+class GraphNodeLabelError(GraphException):
+    pass

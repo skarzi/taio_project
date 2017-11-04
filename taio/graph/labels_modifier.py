@@ -1,5 +1,7 @@
 import functools
 
+from .exceptions import GraphNodeLabelError
+
 
 def intigerify(func):
     @functools.wraps(func)
@@ -17,10 +19,10 @@ class LabelsModifier:
         modifier = self.get(label, modifier)
         if modifier:
             return modifier(number)
-        raise ValueError(f'Wrong label "{label}"!')
+        raise GraphNodeLabelError('Wrong label "{}".'.format(label))
 
     def get(self, label, modifier=True, fallback=None):
-        method_name = f'{"modify" if modifier else "unmodify"}_{label}'
+        method_name = '_'.join(["modify" if modifier else "unmodify", label])
         return getattr(self, method_name, fallback)
 
     @intigerify
