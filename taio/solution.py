@@ -29,6 +29,6 @@ def solution(test_data_path):
     task = DataLoader().load(test_data_path)
     g = create_graph(task)
     flow_graph = edmonds_karp(g, g.graph['source'], g.graph['target'])
-    max_flow = flow_graph.graph['max_flow']
+    flow_loss = flow_graph.graph['expected_flow'] - flow_graph.graph['max_flow']
     assignments = list(associate_worker_with_project(flow_graph))
-    return max_flow, assignments
+    return flow_loss, assignments

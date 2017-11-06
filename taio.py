@@ -15,8 +15,8 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    max_flow, assignments = solution(args.file)
+    flow_loss, assignments = solution(args.file)
     if not args.no_assignments:
         for worker, project in assignments:
             print(worker, project)
-    print(max_flow)
+    print(flow_loss)

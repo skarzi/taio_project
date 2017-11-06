@@ -120,6 +120,7 @@ def create_graph(task, labels_modifier=None):
     labels_modifier = labels_modifier or LabelsModifier(task.info)
     graph = DirectedGraph()
     graph.graph['task_info'] = task.info
+    graph.graph['expected_flow'] = 0
     graph.graph['labels_modifier'] = labels_modifier
     graph.graph['source'] = labels_modifier.modify_source(0)
     graph.graph['target'] = labels_modifier.modify_target(
@@ -158,4 +159,5 @@ def create_graph(task, labels_modifier=None):
             graph.graph['target'],
             capacity=features_sum,
         )
+        graph.graph['expected_flow'] += features_sum
     return graph
