@@ -13,6 +13,8 @@ Task = namedtuple('Task', ['info', 'projects', 'workers'])
 
 
 class DataLoader:
+    SEPARATOR = ','
+
     def load(self, fname):
         if not os.path.exists(fname):
             raise dl_exc.InputDataFileNotExist()
@@ -36,7 +38,8 @@ class DataLoader:
 
     def _load_worker(self, task_info, worker_line):
         worker = list()
-        for x in worker_line.split(' '):
+        for x in worker_line.split(self.SEPARATOR):
+            x = x.strip()
             if x == '1':
                 worker.append(True)
             elif x == '0':
@@ -48,7 +51,7 @@ class DataLoader:
         return worker
 
     def _load_project(self, task_info, project_line):
-        project = [int(x) for x in project_line.split(' ')]
+        project = [int(x.strip()) for x in project_line.split(self.SEPARATOR)]
         if (len(project) != task_info.features_number or
                 not all(x >= 0 for x in project)):
             raise dl_exc.ProjectsInputDataError()
@@ -58,7 +61,7 @@ class DataLoader:
         first_line = file_handler.readline().strip()
         while not first_line:
             first_line = file_handler.readline().strip()
-        first_line = [int(x) for x in first_line.split()]
+        first_line = [int(x.strip()) for x in first_line.split(self.SEPARATOR)]
         if len(first_line) != 3 or not all(x > 0 for x in first_line):
             raise dl_exc.FirstLineInputDataError()
         return TaskInfo(first_line[1], first_line[0], first_line[-1])
